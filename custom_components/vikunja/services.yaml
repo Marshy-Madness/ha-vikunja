@@ -1,0 +1,80 @@
+create_task:
+  target:
+    entity:
+      integration: vikunja
+      domain: todo
+  fields:
+    title:
+      required: true
+      example: "Replace furnace filter"
+      selector:
+        text:
+    description:
+      required: false
+      selector:
+        text:
+          multiline: true
+    due_date:
+      required: false
+      selector:
+        datetime:
+    priority:
+      required: false
+      selector:
+        select:
+          options:
+            - label: "Unset"
+              value: "0"
+            - label: "Low"
+              value: "1"
+            - label: "Medium"
+              value: "2"
+            - label: "High"
+              value: "3"
+            - label: "Urgent"
+              value: "4"
+            - label: "Do now"
+              value: "5"
+    labels:
+      required: false
+      example: "chores"
+      selector:
+        text:
+          multiple: true
+
+get_tasks:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: vikunja
+    filter:
+      required: false
+      default: "done = false"
+      example: "done = false && due_date < now+3d"
+      selector:
+        text:
+    search:
+      required: false
+      selector:
+        text:
+
+add_comment:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: vikunja
+    task_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          mode: box
+    comment:
+      required: true
+      selector:
+        text:
+          multiline: true

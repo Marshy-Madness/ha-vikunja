@@ -1,0 +1,79 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Vikunja",
+        "description": "Create an API token in Vikunja under Settings → API Tokens. It needs these permissions: Projects (read all), Tasks (read all, read one, create, update, delete), Labels (read all), Tasks Labels (bulk), Tasks Comments (create).",
+        "data": {
+          "url": "URL",
+          "api_token": "API token",
+          "verify_ssl": "Verify SSL certificate"
+        },
+        "data_description": {
+          "url": "Vikunja address as seen from Home Assistant, e.g. http://localhost:3456."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Vikunja",
+        "description": "The API token for {url} stopped working or is missing a permission. Enter a new one.",
+        "data": {
+          "api_token": "API token"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to Vikunja. Check the URL.",
+      "invalid_auth": "Vikunja rejected the API token, or it lacks the permissions listed above.",
+      "invalid_response": "Something answered at that URL, but it doesn't look like the Vikunja API.",
+      "unknown": "Unexpected error, see the Home Assistant log."
+    },
+    "abort": {
+      "already_configured": "This Vikunja account is already configured.",
+      "reauth_successful": "Re-authentication was successful."
+    }
+  },
+  "entity": {
+    "calendar": {
+      "tasks": { "name": "Tasks" }
+    },
+    "sensor": {
+      "open_tasks": { "name": "Open tasks" },
+      "overdue_tasks": { "name": "Overdue tasks" },
+      "due_today": { "name": "Due today" },
+      "due_this_week": { "name": "Due this week" },
+      "high_priority_tasks": { "name": "High priority tasks" },
+      "next_due": { "name": "Next due" }
+    }
+  },
+  "services": {
+    "create_task": {
+      "name": "Create task",
+      "description": "Creates a task in the project behind a Vikunja to-do list, with extras the to-do services can't set. Returns the new task.",
+      "fields": {
+        "title": { "name": "Title", "description": "Task title." },
+        "description": { "name": "Description", "description": "Task description, plain text." },
+        "due_date": { "name": "Due date", "description": "When the task is due." },
+        "priority": { "name": "Priority", "description": "Vikunja priority, 0 (unset) to 5 (do now)." },
+        "labels": { "name": "Labels", "description": "Names of existing Vikunja labels to add." }
+      }
+    },
+    "get_tasks": {
+      "name": "Get tasks",
+      "description": "Returns tasks from all projects matching a Vikunja filter query.",
+      "fields": {
+        "config_entry_id": { "name": "Vikunja account", "description": "Which Vikunja account to query. Defaults to the first one." },
+        "filter": { "name": "Filter", "description": "Vikunja filter, see vikunja.io/docs/filters. E.g. done = false && priority >= 3." },
+        "search": { "name": "Search", "description": "Only tasks whose text contains this." }
+      }
+    },
+    "add_comment": {
+      "name": "Add comment",
+      "description": "Adds a comment to a task.",
+      "fields": {
+        "config_entry_id": { "name": "Vikunja account", "description": "Which Vikunja account to use. Defaults to the first one." },
+        "task_id": { "name": "Task ID", "description": "Numeric task id, as in the task's URL." },
+        "comment": { "name": "Comment", "description": "Comment text." }
+      }
+    }
+  }
+}
